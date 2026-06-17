@@ -1,17 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK17'
-        maven 'Maven'
-    }
-
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/your-username/your-repo.git'
+                git url: 'https://github.com/your-username/your-repo.git', branch: 'main'
             }
         }
 
@@ -21,12 +15,9 @@ pipeline {
             }
         }
 
-        stage('Run Application') {
+        stage('Deploy') {
             steps {
-                sh '''
-                pkill -f "java -jar" || true
-                nohup java -jar target/*.jar > app.log 2>&1 &
-                '''
+                sh 'cp target/*.war /opt/tomcat/webapps/'
             }
         }
     }
